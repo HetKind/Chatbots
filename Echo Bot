@@ -1,0 +1,8 @@
+#The bot introduction
+print('Hello! Welcome to the upside down')
+#The bot's functionality
+print('I will repeat after you.')
+#repeat user
+stuff_to_echo=input('Say something.')
+output
+print('You said: ' + stuff_to_echo)
