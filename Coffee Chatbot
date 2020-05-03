@@ -1,101 +1,175 @@
-#main function
+import sys
+
+#yes,no,terminate thingy
+yes = ['y', 'yes', 'ya', 'yep', 'yup', 'yaaaaas', 'totally', 'totes', 'sure', 'you bet', 'ok', 'k', 'okay',
+       'okie dokie', 'alright', 'alrighty', 'sounds good', 'for sure', 'sure thing', 'certainly', 'definitely',
+       'of course', 'gladly', 'indubitably', 'absolutely', 'indeed', 'undoubtedly', 'yeah', 'yeah yeah yeah', 'fine',
+       'affirmative', 'very well', 'obviously', 'aye', 'forsooth', 'yea', 'verily', 'surely']
+no = ['n', 'no', 'nah', 'nope', 'no way', 'sorry', 'not now', 'certainly not', 'by no means', 'i shall not',
+      'not likely', 'no thanks!', 'i think not ', 'unfortunately not', 'i’m slammed', 'not possible', 'not this time',
+      'not for me, thanks', 'it’s not my thing', 'i think i’ll pass ', 'not today, thanks', 'i wish i could but…',
+      'i’m taking sometime', 'maybe another time', 'i’m not interested']
+terminate = ['bye', 'nevermind', 'goodbye', 'exit', 'quit', 'stop', 'leave', 'terminate', 'abolish', 'abort', 'adjourn',
+             'annul', 'cancel', 'cease', 'complete', 'conclude', 'cut off', 'determine', 'discharge', 'discontinue',
+             'dismiss', 'dissolve', 'eliminate', 'expire', 'halt', 'break', 'cease', 'close', 'drop', 'end', 'halt',
+             'kill', 'pause', 'put an end to', 'quit', 'stall']
+
 def coffee_bot():
-  print("Welcome to the cafe!")
-  size  = get_size()
-  #print(size)
-  drink_type  = get_drink_type()
-  #print(drink_type)
-  print(f"Alright, that's a {size} {drink_type}!")
-  cup = get_cup_type()
-  hot_ice  = hot_or_iced()
-  print(f"Okay! {hot_ice} in a {cup} it is.")
-  name  = input("Can I get your name please?")
-  print(f"Thanks, {name}! Your drink will be ready shortly.")
-  order = order_again()
+    print('Welcome to the cafe!')
+    order_drink = 'y'
+    drinks = []
+    while order_drink in yes:
+        size = get_size()
+        drink_type = get_drink_type()
+
+        drink = '{} {}'.format(size, drink_type)
+        print('Alright, that\'s a {}!'.format(drink))
+        hot_ice = hot_or_iced()
+        drink = '{} {} {}'.format(size, hot_ice, drink_type)
+        drinks.append(drink)   #saves the orders in a list
+
+        #Additional Drinks
+        while True:
+            order_drink = input('Would you like to order another drink? \n> ')
+            if order_drink in yes or order_drink in no:
+                break
+            elif order_drink in terminate:
+                sys.exit("Order terminated :(")
+    print('Okay, so I have:')
+    for i in drinks:
+        print(f'- {i}')#printing the list where the orders are sored i.e drinks
+    #type of cup
+    cup = get_cup_type()
+    #asking for name
+    name = input('Can I get your name please? \n> ')
+    if name in terminate:
+        print(f'is {name }')
+        sys.exit("Order terminated :( ")
+    else:
+        print('Thanks, {}! Your order will be ready shortly.'.format(name))
 
 
-#user value error message
-def print_message():
-  print("I'm sorry, I did not understand your selection. Please enter the corresponding letter for your response.")
+#menu
+def get_drink_type():
+    res = input('What type of drink would you like? \n[a] Brewed Coffee \n[b] Mocha \n[c] Latte \n[d] Green Tea \n')
+
+    if res == 'a':
+        return brewing_style()
+    elif res == 'b':
+        return order_mocha()
+    elif res == 'c':
+        return order_latte()
+    elif res == 'd':
+        return "Green Tea"
+    elif res in terminate:
+        sys.exit("Order terminated :(")
+    else:
+        print_message()
+        return get_drink_type()
 
 
-#Coffee Drink SIZE
-def get_size():
-  res = input('What size drink can I get for you? \n[a] Small \n[b] Medium \n[c] Large \n> ')
-  if res  ==  'a':
-    return "small"
-  elif res  ==  'b':
-    return  "medium"
-  elif res  ==  'c':
-    return  "large"
-  else:
-    print_message()
-    return get_size()
+#mocha
+def order_mocha():
+    while True:
+        res = input(
+            'Would you like to try our limited-edition peppermint mocha? \n[a] Sure! \n [b] Maybe next time! \n> ')
+
+        if res in yes or 'a':
+            return 'peppermint mocha'
+        elif res in no or 'b':
+            return 'mocha'
+        elif res in terminate:
+            sys.exit("Order terminated :(")
+        print_message()
 
 
-#function to ask the user for thier drink order.
-def  get_drink_type():
-  res = input('What type of drink would you like? \n[a] Brewed Coffee \n[b] Mocha \n[c] Latte \n> ')
-  if res  ==  'a':
-    return "brewed coffee"
-  elif res  ==  'b':
-    return  "mocha"
-  elif res  ==  'c':
-    return  order_latte()
-  else:
-    print_message()
-    return get_drink_type()
+# COFFEE/Brewing Styles/coffee
+def brewing_style():
+    while True:
+        res = input(
+            'How should we brew your coffee? \n[a] Drip Brew.\n[b] Pour Over. \n>[c] Cold Brew. \n[d] Espresso. \n>[e] Ristrettoo \n')
 
-#latte descriptions
-def order_latte():
-  res = input('And what kind of milk for your latte? \n[a] 2% milk  \n[b] Non-fat milk \n[c] Soy milk \n> ')
-  if res  ==  'a':
-    return "latte"
-  elif res  ==  'b':
-    return  "non-fat latte"
-  elif res  ==  'c':
-    return  "soy latte"
-  else:
-    print_message()
-    return order_latte()
+        if res == 'a':
+            return 'drip brew coffee'
+        elif res == 'b':
+            return 'pour over coffee'
+        elif res == 'c':
+            return 'cold brew coffee'
+        elif res == 'd':
+            return 'espresso'
+        elif res == 'e':
+            return 'ristretto'
+        elif res in terminate:
+            sys.exit("Order terminated :(")
+        print_message()
 
 
-
-#resuable or plastic cup
+# resuable or plastic cup
 def get_cup_type():
-  res = input('Would like a plastic cup or your own reusable cup? \n[a] Plastic Cup  \n[b] Reusable Cup \n> ')
-  if res  ==  'a':
-    return "plastic cup"
-  elif res  ==  'b':
-    return  "reusable cup"
-  else:
-    print_message()
-    return get_cup_type()
+    res = input('Would like a plastic cup or your own reusable cup? \n[a] Plastic Cup  \n[b] Reusable Cup \n> ')
+    if res == 'a':
+        return "plastic cup"
+    elif res == 'b':
+        return "reusable cup"
+    elif res in terminate:
+        sys.exit("Order terminated :(")
+    else:
+        print_message()
+        return get_cup_type()
 
 
-
-#hot or cold drink?
+# hot or cold drink?
 def hot_or_iced():
-  res = input(' How’d you like your drink hot or iced? \n[a] Hot  \n[b] Iced \n> ')
-  if res  ==  'a':
-    return "hot"
-  elif res  ==  'b':
-    return  "iced"
-  else:
-    print_message()
-    return hot_or_iced()
-   
+    res = input('How’d you like your drink hot or iced? \n[a] Hot  \n[b] Iced \n> ')
+    if res == 'a':
+        return "hot"
+    elif res == 'b':
+        return "iced"
+    elif res in terminate:
+        sys.exit("Order terminated :(")
+    else:
+        print_message()
+        return hot_or_iced()
 
-#additional orders?
-def order_again():
-  res = input(' Would you like to order an additional drink? \n[a] Yes  \n[b] Nop \n> ')
-  if res  ==  'a':
-    return coffee_bot()
-  elif res  ==  'b':
-    print("Visit again!")
-  else:
-    print_message()
-    return hot_or_iced()
 
-# Call coffee_bot()!
+#error message for invalid input
+def print_message():
+    print('I\'m sorry, I did not understand your selection. Please enter the corresponding letter for your response.')
+
+
+#size of the drink
+def get_size():
+    res = input('What size drink can I get for you? \n[a] Small \n[b] Medium \n[c] Large \n> ')
+
+    if res == 'a':
+        return 'small'
+    elif res == 'b':
+        return 'medium'
+    elif res == 'c':
+        return 'large'
+    elif res in terminate:
+        sys.exit("Order terminated :(")
+    else:
+        print_message()
+        return get_size()
+
+
+#latee
+def order_latte():
+    res = input('And what kind of milk for your latte? \n[a] 2% milk \n[b] Non-fat milk \n[c] Soy milk \n> ')
+
+    if res == 'a':
+        return 'latte'
+    elif res == 'b':
+        return 'non-fat latte'
+    elif res == 'c':
+        return 'soy latte'
+    elif res in terminate:
+        sys.exit("Order terminated :(")
+    else:
+        print_message()
+        return order_latte()
+
+
+#call main function
 coffee_bot()
